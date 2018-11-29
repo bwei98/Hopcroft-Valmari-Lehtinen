@@ -2,6 +2,7 @@
 *.d
 
 # Compiled Object files
+build
 *.slo
 *.lo
 *.o
@@ -11,22 +12,25 @@
 *.gch
 *.pch
 
-# Compiled Dynamic libraries
+# Compiled libraries
+lib/*
 *.so
 *.dylib
 *.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
 *.lai
 *.la
 *.a
 *.lib
 
+# Fortran module files
+*.mod
+*.smod
+
 # Executables
+build
 *.exe
 *.out
 *.app
+
+# Mac Specific
+.DS_Store
