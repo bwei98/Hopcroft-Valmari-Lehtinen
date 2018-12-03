@@ -9,12 +9,10 @@ int main(int argc, char *argv[])
     std::set<int> Q (states, states+4);
     int finals[2] = {2,3};
     std::set<int> F (finals, finals+2);
-    char *trans = (char*)std::calloc(16, sizeof(char));
+    int *trans = (int*)std::calloc(16, sizeof(int));
     for(int i = 0; i < 16; i++)
-      trans[i] = '\0';
-    char sigma[1] = {'a'};
-
-
+      trans[i] = -1;
+    int sigma = 1;
 
     DFA firstone (q0, Q, F, trans, sigma);
     std::cout << "num states = " << firstone.num_states() << std::endl;
