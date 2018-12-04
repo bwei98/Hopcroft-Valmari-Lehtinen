@@ -15,6 +15,9 @@ class DFA{
       DFA (int, std::vector<int>, std::vector<int>, int*, int);
       DFA (int, int);
       std::vector<int> getStates (void);
+      int* getTrans (void);
+      std::vector<int> getFinals (void);
+      int init (void);
       int num_states (void);
       int num_finals (void);
       std::vector< std::vector<int> > hopcroft (void);
