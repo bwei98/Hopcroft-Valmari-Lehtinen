@@ -17,5 +17,6 @@ class DFA{
       std::vector<int> getStates (void);
       int num_states (void);
       int num_finals (void);
-      DFA hopcroft();
+      std::vector< std::vector<int> > hopcroft (void);
+      DFA hopPartition2DFA(std::vector< std::vector<int> >);
 };
