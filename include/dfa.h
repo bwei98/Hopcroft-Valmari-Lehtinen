@@ -17,6 +17,7 @@ class DFA{
       std::vector<int> getStates (void);
       int* getTrans (void);
       std::vector<int> getFinals (void);
+      int alph (void);
       int init (void);
       int num_states (void);
       int num_finals (void);

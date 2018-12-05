@@ -4,7 +4,6 @@
 #include <algorithm>
 #include "../include/dfa.h"
 
-//template <class vector>
 DFA::DFA (int initial, std::vector<int> Q, std::vector<int> F, int* trans, int sigma) {
   q0 = initial;
   states = Q;
@@ -13,12 +12,12 @@ DFA::DFA (int initial, std::vector<int> Q, std::vector<int> F, int* trans, int s
   alphabet_size = sigma;
 }
 
-DFA::DFA (int num_states, int alphabet_size) {
+DFA::DFA (int num_states, int alpha) {
   std::srand(std::time(0));
   std::vector<int> Q, F;
   for(int i = 0; i < num_states; ++i){
-    Q.insert(Q.begin() + i, i);
-    if(std::rand() % 2) F.insert(F.begin() + i, i);
+    Q.push_back(i);
+    if(std::rand() % 2) F.push_back(i);
   }
   states = Q;
   finals = F;
@@ -26,33 +25,27 @@ DFA::DFA (int num_states, int alphabet_size) {
   int transition_size = num_states * alphabet_size;
   int* trans = (int*)std::calloc(transition_size, sizeof(int));
   for(int state = 0; state < num_states; state++)
-  for(int tran_num = 0; tran_num < alphabet_size; tran_num++){
+  for(int tran_num = 0; tran_num <= alpha; tran_num++){
     int r = std::rand() % num_states;
-    trans[state * alphabet_size + tran_num] = r;
+    trans[state * alpha + tran_num] = r;
   }
   transitions = trans;
-  alphabet_size = alphabet_size;
+  alphabet_size = alpha;
 }
 
-std::vector<int> DFA::getStates() {
-  return states;
-}
+std::vector<int> DFA::getStates() { return states; }
 
 std::vector<int> DFA::getFinals() { return finals; }
 
 int DFA::init() { return q0; }
 
-int* DFA::getTrans() {
-  return transitions;
-}
+int DFA::alph() { return alphabet_size; }
 
-int DFA::num_states() {
-  return states.size();
-}
+int* DFA::getTrans() { return transitions; }
 
-int DFA::num_finals() {
-  return finals.size();
-}
+int DFA::num_states() { return states.size(); }
+
+int DFA::num_finals() { return finals.size(); }
 
 std::vector< std::vector<int> > DFA::hopcroft(){
   //P := {F, Q \ F};
@@ -129,7 +122,6 @@ std::vector< std::vector<int> > DFA::hopcroft(){
             X.push_back(q);
         }
       }
-
       std::cout<<"generated X  = ";
       for (auto const& i: X) {
           std::cout << i << " ";
@@ -138,6 +130,7 @@ std::vector< std::vector<int> > DFA::hopcroft(){
       for (int y = P.size()-1; y >= 0; --y) {
         std::cout<<"----for loop"<<std::endl;
         std::vector<int> Y = P[y];
+        std::cout<<"calling hop"<<std::endl;
 
         std::cout<<"Checkin Y = ";
         for (auto const& i: Y) {
