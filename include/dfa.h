@@ -1,5 +1,4 @@
 #include <cstdlib>
-#include <iostream>
 #include <vector>
 
 class DFA{
@@ -13,7 +12,6 @@ class DFA{
 
   public:
       DFA (int, std::vector<int>, std::vector<int>, int*, int);
-      DFA (int, int);
       std::vector<int> getStates (void);
       int* getTrans (void);
       std::vector<int> getFinals (void);
@@ -21,6 +19,4 @@ class DFA{
       int init (void);
       int num_states (void);
       int num_finals (void);
-      std::vector< std::vector<int> > hopcroft (void);
-      DFA hopPartition2DFA(std::vector< std::vector<int> >);
 };
