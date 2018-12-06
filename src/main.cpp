@@ -5,46 +5,53 @@
 #include "../include/dfa.h"
 #include "../include/examples.h"
 #include "../include/hopcroft.h"
+#include "../include/valmari.h"
 
 int main(int argc, char *argv[])
 {
-    DFA firstone = EX::hw05();
+    DFA firstone = EX::astarb();
+    Valmari::win(firstone);
+    std::cout<<"cool stuff\n\n"<<std::endl;
+
+
+    DFA wiki = EX::wikipedia();
+    Valmari::win(wiki);
+    std::cout<<"cool stuff"<<std::endl;
 
     std::vector< std::vector<int> > H = Hopcroft::partition(firstone);
 
-    std::cout<<"\n\nANSWER H IS ";
-    for (auto const& i: H) {
-      std::cout<< "(";
-      for (auto const& j: i) {
-          std::cout << j << " ";
-      }
-      std::cout<< ") ";
-    }
-    std::cout << std::endl;
-    DFA A = Hopcroft::part2DFA(H, firstone);
-
-    std::cout<<"q0 = "<<A.init()<<std::endl<<"F = ";
-    for (auto const& i: A.getFinals()) {
-        std::cout << i << " ";
-    }std::cout<<std::endl;
-
-    for(int i = 0; i < A.getStates().size(); ++i){
-      std::cout<<i<<" :";
-      for(int j = 0; j < A.alph(); ++j)
-        std::cout<<A.getTrans()[i * A.alph() + j] << " ";
-      std::cout<<std::endl;
-    }
+    // std::cout<<"\n\nANSWER H IS ";
+    // for (auto const& i: H) {
+    //   std::cout<< "(";
+    //   for (auto const& j: i) {
+    //       std::cout << j << " ";
+    //   }
+    //   std::cout<< ") ";
+    // }
+    // std::cout << std::endl;
+    // DFA A = Hopcroft::part2DFA(H, firstone);
+    //
+    // std::cout<<"q0 = "<<A.init()<<std::endl<<"F = ";
+    // for (auto const& i: A.getFinals()) {
+    //     std::cout << i << " ";
+    // }std::cout<<std::endl;
+    //
+    // for(int i = 0; i < A.getStates().size(); ++i){
+    //   std::cout<<i<<" :";
+    //   for(int j = 0; j < A.alph(); ++j)
+    //     std::cout<<A.getTrans()[i * A.alph() + j] << " ";
+    //   std::cout<<std::endl;
+    // }
 
     DFA ring1 = EX::ring(1000);
     DFA ring2 = EX::ring(10000);
-    DFA ring3 = EX::ring(50000);
 
     Hopcroft::partition(ring1);
     std::cout<<"ring1 done"<<std::endl;
     Hopcroft::partition(ring2);
     std::cout<<"ring2 done"<<std::endl;
 
-    Hopcroft::partition(ring3);
+
 
     std::cout << "Hello World" << std::endl;
     std::cout << "Hello World" << std::endl << std::endl;
