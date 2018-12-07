@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
     Valmari::win(firstone);
     std::cout<<"cool stuff\n\n"<<std::endl;
 
+    std::cout << "Hello World" << std::endl;
 
     DFA wiki = EX::wikipedia();
     Valmari::win(wiki);
@@ -43,17 +44,10 @@ int main(int argc, char *argv[])
     //   std::cout<<std::endl;
     // }
 
-    DFA ring1 = EX::ring(1000);
-    DFA ring2 = EX::ring(10000);
-
-    Hopcroft::partition(ring1);
-    std::cout<<"ring1 done"<<std::endl;
-    Hopcroft::partition(ring2);
-    std::cout<<"ring2 done"<<std::endl;
 
 
 
-    std::cout << "Hello World" << std::endl;
+
     std::cout << "Hello World" << std::endl << std::endl;
 /*
 auto start = std::chrono::steady_clock::now();
