@@ -22,12 +22,11 @@ int main(int argc, char *argv[])
   DFA D = EX::rand(1,1);
   std::string name;
   switch(choice){
-    case 1: { free(D.getTrans()); D = EX::hw05(); name = "hw05"; break; }
-    case 2: { free(D.getTrans()); D = EX::lect10(); name = "lect10"; break; }
-    case 3: { free(D.getTrans()); D = EX::wikipedia(); name = "wikipedia"; break; }
-    case 4: { free(D.getTrans()); D = EX::ring(100); name = "ring100"; break; }
+    case 1: { D = EX::hw05(); name = "hw05"; break; }
+    case 2: { D = EX::lect10(); name = "lect10"; break; }
+    case 3: { D = EX::wikipedia(); name = "wikipedia"; break; }
+    case 4: { D = EX::ring(100); name = "ring100"; break; }
     case 5: {
-        free(D.getTrans());
         int n, s;
         std::cout<<"How many states?"<<std::endl;
         std::cin>>n;

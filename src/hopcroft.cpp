@@ -5,7 +5,7 @@
 #include "../include/dfa.h"
 #include "../include/hopcroft.h"
 
-std::vector< std::vector<int> > Hopcroft::partition(DFA M){ //O(n^2 s log n)
+std::vector< std::vector<int> > Hopcroft::partition(DFA M){
   //P := {F, Q \ F}; O(n)
   std::vector<int> F = M.final_bits();
   std::vector<int> Q (M.num_states(), 1);
@@ -14,13 +14,13 @@ std::vector< std::vector<int> > Hopcroft::partition(DFA M){ //O(n^2 s log n)
   std::vector< std::vector<int> >  P;
   P.insert(P.begin(), F); P.insert(P.begin() + 1, Fc);
 
-  //  Ws := {F}; O(1)
+  //  Ws := {F};
   std::vector< std::vector<int> > Ws;
   Ws.push_back(F);
 
-  //while (Ws is not empty); O(log n) iterations
+  //while (Ws is not empty);
   while (Ws.size() > 0) {
-    //choose and remove a set A from W; O(1)
+    //choose and remove a set A from W;
     std::vector<int> A = Ws.front();
     Ws.erase(Ws.begin());
 
@@ -32,32 +32,30 @@ std::vector< std::vector<int> > Hopcroft::partition(DFA M){ //O(n^2 s log n)
       X[q] = A[M.getTrans()[M.alph() * q + c]];
 
       //for each set Y in P for which X ∩ Y is nonempty and Y \ X is nonempty do
-      // O(n) iterations
       for (int y = P.size()-1; y >= 0 ; --y) {
-        // O(n) to compute Y
         std::vector<int> Y = P[y], XintY(Q.size()), YsubX(Q.size());
         int sz_XintY = 0, sz_YsubX = 0;
-        for(int q = 0; q < Q.size(); ++q){
+        for(int q = 0; q < Q.size(); ++q) {
           sz_XintY += XintY[q] = Y[q] && X[q];
           sz_YsubX += YsubX[q] = Y[q] && !X[q];
         }
         if(sz_XintY && sz_YsubX) {
-          //replace Y in P by the two sets X ∩ Y and Y \ X; O(1)
+          //replace Y in P by the two sets X ∩ Y and Y \ X;
           P.erase(P.begin()+y);
           P.push_back(XintY); P.push_back(YsubX);
 
-          //if Y is in W; O(n)
+          //if Y is in W;
           int i = 0;
           for ( ; i < Ws.size(); ++i) if (Ws[i] == Y) break;
           if (i != Ws.size()) {
-            //replace Y in W by the same two sets; O(1)
+            //replace Y in W by the same two sets;
             Ws.erase(Ws.begin() + i);
             Ws.push_back(XintY); Ws.push_back(YsubX);
           } else {
-            //if |X ∩ Y| > |Y \ X|; O(1)
-            if (sz_XintY > sz_YsubX) //add Y \ X to W; O(1)
+            //if |X ∩ Y| > |Y \ X|;
+            if (sz_XintY > sz_YsubX) //add Y \ X to W;
             Ws.push_back(YsubX);
-            else //add X ∩ Y to W;  O(1)
+            else //add X ∩ Y to W;
             Ws.push_back(XintY);
           }
         }
@@ -71,8 +69,8 @@ DFA Hopcroft::part2DFA(std::vector< std::vector<int> > P, DFA original) {
   for(int i = 0; i < P.size(); ++i) {
     std::vector<int> V;
     for(int j = 0; j < P[i].size(); ++j)
-    if(P[i][j]) V.push_back(j);
-    P[i] = V;
+      if(P[i][j]) V.push_back(j);
+        P[i] = V;
   }
   std::vector<int> finals = original.final_bits();
   int initial;
@@ -96,7 +94,6 @@ DFA Hopcroft::part2DFA(std::vector< std::vector<int> > P, DFA original) {
             done = true;
             break;
           }
-
       }
     }
   }
