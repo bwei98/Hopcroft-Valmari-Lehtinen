@@ -108,8 +108,6 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
 
     ff = finals.size();
 
-    std::cout<<nn<<" "<<mm<<" "<<q0<<" "<<ff<<std::endl;
-
     /* Read sizes and reserve most memory */
 
 
@@ -131,7 +129,6 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
         reach( q ); }
     }
 
-		std::cout<<nn<<" "<<mm<<" "<<q0<<" "<<ff<<' '<<rr<<std::endl;
 
     ff = rr; rem_unreachable( H, T );
 
@@ -140,7 +137,6 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
     	W = std::vector<int> ( mm+1 );
       M = std::vector<int> ( mm+1);
     	M[0] = ff;
-			std::cout << B.z <<' '<< B.S[q0] <<ff<<'\n';
 
     	if( ff ){ W[w++] = 0; B.split(); }
 
@@ -168,10 +164,7 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
     		B.split(); ++c;
     		while( b < B.z ){
     			for( i = B.F[b]; i < B.P[b]; ++i ){
-    				for(
-    					j = F[B.E[i]];
-    					j < F[B.E[i]+1]; ++j
-    				){
+    				for( j = F[B.E[i]]; j < F[B.E[i]+1]; ++j){
     					C.mark( A[j] ); } }
     			C.split(); ++b; }
     	}
@@ -184,20 +177,16 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
     for( int b = 0; b < B.z; ++b ){
       if( B.F[b] < ff ){ ++fo; } }
 
-
-
     /* Print the result */
-    std::cout<<"first line of results"<<std::endl;
+		/* Valmari prints the results, we don't we load into our DFA format instead
     std::cout << B.z <<' '<< mo<<' '<< B.S[q0] <<' '<< fo <<'\n';
-    std::cout<<"first for loop"<<std::endl;
     for( int t = 0; t < mm; ++t ) {
       if( B.L[T[t]] == B.F[B.S[T[t]]] ) {
         std::cout << B.S[T[t]] <<' '<< L[t]<<' '<< B.S[H[t]] <<'\n';
       } }
-      std::cout<<"2nd for loop"<<std::endl;
       for( int b = 0; b < B.z; ++b ) {
         if( B.F[b] < ff ){std::cout << b <<'\n'; }
-      }
+      } */
 
 
 			int num_states = B.z;

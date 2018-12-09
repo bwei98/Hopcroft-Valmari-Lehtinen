@@ -9,94 +9,138 @@
 
 int main(int argc, char *argv[])
 {
-    DFA firstone = EX::astarb();
-  //  std::cout<< "start function" << std::endl;
+  int printres;
+  std::cout<<"Would you like result DFAs printed? (0 = no, 1 = yes)\n";
+  std::cout<<"Note that this will create LOTS of output!";
+  std::cin>>printres;
 
-    Valmari::win(firstone);
-    std::cout<<"cool stuff\n\n"<<std::endl;
+  std::cout<<"-----------------------------------------"<<std::endl;
+  DFA hw05 = EX::hw05();
+  std::cout<<"Example 1: DFA in HW 05 Problem 3"<<std::endl;
+  auto start = std::chrono::high_resolution_clock::now();
+  std::vector< std::vector<int> > hw05HOP = Hopcroft::partition(hw05);
+  auto end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tHopcroft took "<<
+    std::chrono::duration <double, std::milli> (end-start).count()<<
+    " ms."<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  DFA hw05VAL = Valmari::win(hw05);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tValmari took "<<
+  std::chrono::duration <double, std::milli> (end-start).count()<<
+  " ms."<<std::endl;
 
-    std::cout << "Hello World" << std::endl;
+  std::cout<<"-----------------------------------------"<<std::endl;
+  DFA lect10 = EX::lect10();
+  std::cout<<"Example 2: DFA in Lecture 10 Slide 27"<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  std::vector< std::vector<int> > l10HOP = Hopcroft::partition(lect10);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tHopcroft took "<<
+    std::chrono::duration <double, std::milli> (end-start).count()<<
+    " ms."<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  DFA l10VAL = Valmari::win(lect10);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tValmari took "<<
+  std::chrono::duration <double, std::milli> (end-start).count()<<
+  " ms."<<std::endl;
 
-    // DFA wiki = EX::rand(20, 4);
-    // Valmari::win(wiki);
-    // std::cout<<"cool stuff"<<std::endl;
+  std::cout<<"-----------------------------------------"<<std::endl;
+  DFA wiki = EX::wikipedia();
+  std::cout<<"Example 3: DFA in from Wikipedia"<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  std::vector< std::vector<int> > wikiHOP = Hopcroft::partition(wiki);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tHopcroft took "<<
+    std::chrono::duration <double, std::milli> (end-start).count()<<
+    " ms."<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  DFA wikiVAL = Valmari::win(wiki);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tValmari took "<<
+  std::chrono::duration <double, std::milli> (end-start).count()<<
+  " ms."<<std::endl;
 
-    std::vector< std::vector<int> > H = Hopcroft::partition(firstone);
+  std::cout<<"-----------------------------------------"<<std::endl;
+  DFA astarb = EX::astarb();
+  std::cout<<"Example 4: A 6-state DFA for a*b"<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  std::vector< std::vector<int> > abHOP = Hopcroft::partition(astarb);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tHopcroft took "<<
+    std::chrono::duration <double, std::milli> (end-start).count()<<
+    " ms."<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  DFA abVAL = Valmari::win(astarb);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tValmari took "<<
+  std::chrono::duration <double, std::milli> (end-start).count()<<
+  " ms."<<std::endl;
 
-    // std::cout<<"\n\nANSWER H IS ";
-    // for (auto const& i: H) {
-    //   std::cout<< "(";
-    //   for (auto const& j: i) {
-    //       std::cout << j << " ";
-    //   }
-    //   std::cout<< ") ";
-    // }
-    // std::cout << std::endl;
-    // DFA A = Hopcroft::part2DFA(H, firstone);
-    //
-    // std::cout<<"q0 = "<<A.init()<<std::endl<<"F = ";
-    // for (auto const& i: A.getFinals()) {
-    //     std::cout << i << " ";
-    // }std::cout<<std::endl;
-    //
-    // for(int i = 0; i < A.getStates().size(); ++i){
-    //   std::cout<<i<<" :";
-    //   for(int j = 0; j < A.alph(); ++j)
-    //     std::cout<<A.getTrans()[i * A.alph() + j] << " ";
-    //   std::cout<<std::endl;
-    // }
+  std::cout<<"-----------------------------------------"<<std::endl;
+  DFA r100 = EX::ring(100);
+  std::cout<<"Example 5: Ring of size 100"<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  std::vector< std::vector<int> > r100HOP = Hopcroft::partition(r100);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tHopcroft took "<<
+    std::chrono::duration <double, std::milli> (end-start).count()<<
+    " ms."<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  DFA r100VAL = Valmari::win(r100);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tValmari took "<<
+  std::chrono::duration <double, std::milli> (end-start).count()<<
+  " ms."<<std::endl;
 
+  std::cout<<"-----------------------------------------"<<std::endl;
+  DFA r1000 = EX::ring(1000);
+  std::cout<<"Example 6: Ring of size 1000"<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  std::vector< std::vector<int> > r1000HOP = Hopcroft::partition(r1000);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tHopcroft took "<<
+    std::chrono::duration <double, std::milli> (end-start).count()<<
+    " ms."<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  DFA r1000VAL = Valmari::win(r1000);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tValmari took "<<
+  std::chrono::duration <double, std::milli> (end-start).count()<<
+  " ms."<<std::endl;
 
+  std::cout<<"-----------------------------------------"<<std::endl;
+  DFA r21 = EX::rand(100,1);
+  std::cout<<"Example 7: Random 100 state DFA, with unary alphabet"<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  std::vector< std::vector<int> > r21HOP = Hopcroft::partition(r21);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tHopcroft took "<<
+    std::chrono::duration <double, std::milli> (end-start).count()<<
+    " ms."<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  DFA r21VAL = Valmari::win(r21);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tValmari took "<<
+  std::chrono::duration <double, std::milli> (end-start).count()<<
+  " ms."<<std::endl;
 
+  std::cout<<"-----------------------------------------"<<std::endl;
+  DFA r25 = EX::rand(1000,5);
+  std::cout<<"Example 8: Random 100 state DFA, with size 5 alphabet"<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  std::vector< std::vector<int> > r25HOP = Hopcroft::partition(r25);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tHopcroft took "<<
+    std::chrono::duration <double, std::milli> (end-start).count()<<
+    " ms."<<std::endl;
+  start = std::chrono::high_resolution_clock::now();
+  DFA r25VAL = Valmari::win(r25);
+  end = std::chrono::high_resolution_clock::now();
+  std::cout<<"\tValmari took "<<
+  std::chrono::duration <double, std::milli> (end-start).count()<<
+  " ms."<<std::endl;
 
-
-    std::cout << "Hello World" << std::endl << std::endl;
-/*
-auto start = std::chrono::steady_clock::now();
-     DFA B = EX::rand(10,2);
-     B.hopcroft();
-auto end = std::chrono::steady_clock::now();
-auto diff = end - start;
- std::cout << "10: " <<std::chrono::duration <double, std::milli> (diff).count() << " ms" << std::endl;
-
-
- start = std::chrono::steady_clock::now();
-      DFA B2 = EX::rand(100,2);
-      hopcroft();
- end = std::chrono::steady_clock::now();
- diff = end - start;
-  std::cout << "100: " <<std::chrono::duration <double, std::milli> (diff).count() << " ms" << std::endl;
-
-   start = std::chrono::steady_clock::now();
-       DFA B3 = EX::rand(1000,2);
-       B3.hopcroft();
-   end = std::chrono::steady_clock::now();
-   diff = end - start;
-   std::cout << "1000: " <<std::chrono::duration <double, std::milli> (diff).count() << " ms" << std::endl;
-
-    start = std::chrono::steady_clock::now();
-        DFA B4 = EX::rand(10000,2);
-        B4.hopcroft();
-    end = std::chrono::steady_clock::now();
-    diff = end - start;
-  std::cout << "10000: " <<std::chrono::duration <double, std::milli> (diff).count() << " ms" << std::endl;
-
-
-     start = std::chrono::steady_clock::now();
-         DFA B5 = EX::rand(100000,2);
-         B5.hopcroft();
-     end = std::chrono::steady_clock::now();
-     diff = end - start;
-    std::cout << "100000: " <<std::chrono::duration <double, std::milli> (diff).count() << " ms" << std::endl;
-
-    //std::vector< std::vector<int> > HB = B.hopcroft();
-
-    std::cout<<"Hop done"<<std::endl;
-
-//    DFA B2 = B.hopPartition2DFA(HB);
-
-    std::cout<<"\nnum states: "<<B2.num_states()<<std::endl;
-*/
-
-    return 0;
+  return 0;
 }
