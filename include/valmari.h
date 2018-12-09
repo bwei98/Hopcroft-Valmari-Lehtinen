@@ -3,5 +3,5 @@
 
 class Valmari{
   public:
-    static void win (DFA);
+    static DFA win (DFA);
 };

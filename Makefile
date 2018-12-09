@@ -23,8 +23,4 @@ clean:
 	@echo " Cleaning...";
 	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
 
-# Tests
-tester:
-	$(CC) $(CFLAGS) test/tester.cpp $(INC) $(LIB) -o bin/tester
-
 .PHONY: clean

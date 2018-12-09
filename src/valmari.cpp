@@ -99,40 +99,40 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
 }
 
   /* Main program */
-  void Valmari::win(DFA myDFA) {
-    int nn = myDFA.getStates().size();
-    int mm = myDFA.alph() * nn;
-    int q0 = myDFA.init();
+  DFA Valmari::win(DFA myDFA) {
+    nn = myDFA.getStates().size();
+    mm = myDFA.alph() * nn;
+    q0 = myDFA.init();
 
     std::vector<int> finals = myDFA.getFinals();
 
-    int ff = finals.size();
+    ff = finals.size();
 
     std::cout<<nn<<" "<<mm<<" "<<q0<<" "<<ff<<std::endl;
 
     /* Read sizes and reserve most memory */
-    T = std::vector<int>(mm);
-    L = std::vector<int>(mm);
-    H = std::vector<int>(mm);
-    B.init( nn );
-    A = std::vector<int> (mm);
-    F = std::vector<int> (nn+1);
+
+
 
     for (int c = 0, count = 0; c < myDFA.alph(); ++c) {
       for (int q = 0; q < nn; ++q, ++count) {
-        T[count] = q; L[count] = c;
-        H[count] = myDFA.getTrans()[q * myDFA.alph() + c];
+        T.push_back(q); L.push_back(c);
+        H.push_back(myDFA.getTrans()[q * myDFA.alph() + c]);
       }
     }
 
-    reach( q0 ); rem_unreachable( T, H );
-    // for(int i = 0; i < H.size(); i++)
-    //   std::cout<<T[i]<<" "<<L[i]<<" "<<H[i]<<std::endl;
+		B.init( nn );
+		A = std::vector<int> (mm);
+		F = std::vector<int> (nn+1);
 
+    reach( q0 ); rem_unreachable( T, H );
     for (int q : finals) {
       if( B.L[q] < B.P[0] ) {
         reach( q ); }
     }
+
+		std::cout<<nn<<" "<<mm<<" "<<q0<<" "<<ff<<' '<<rr<<std::endl;
+
     ff = rr; rem_unreachable( H, T );
 
 
@@ -140,7 +140,11 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
     	W = std::vector<int> ( mm+1 );
       M = std::vector<int> ( mm+1);
     	M[0] = ff;
+			std::cout << B.z <<' '<< B.S[q0] <<ff<<'\n';
+
     	if( ff ){ W[w++] = 0; B.split(); }
+
+
 
     	/* Make transition partition */
     	C.init( mm );
@@ -185,19 +189,30 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
     /* Print the result */
     std::cout<<"first line of results"<<std::endl;
     std::cout << B.z <<' '<< mo<<' '<< B.S[q0] <<' '<< fo <<'\n';
-
     std::cout<<"first for loop"<<std::endl;
-
     for( int t = 0; t < mm; ++t ) {
       if( B.L[T[t]] == B.F[B.S[T[t]]] ) {
         std::cout << B.S[T[t]] <<' '<< L[t]<<' '<< B.S[H[t]] <<'\n';
       } }
-
       std::cout<<"2nd for loop"<<std::endl;
-
       for( int b = 0; b < B.z; ++b ) {
         if( B.F[b] < ff ){std::cout << b <<'\n'; }
       }
 
-      //return myDFA;
+
+			int num_states = B.z;
+			int initial = B.S[q0];
+			std::vector<int> states (num_states);
+			std::vector<int> fin (num_states, 0);
+			int* transitions = (int*)std::calloc(num_states * myDFA.alph(), sizeof(int));
+			for( int t = 0; t < mm; ++t ){
+				if( B.L[T[t]] == B.F[B.S[T[t]]] )
+					transitions[myDFA.alph() * B.S[T[t]] + L[t]] = B.S[H[t]];
+			}
+			for(int b = 0; b < B.z; ++b)
+				if (B.F[b] < ff ) fin[b] = 1;
+			for(int i = 0; i < num_states; ++i) states[i] = i;
+
+
+      return DFA(num_states, states, fin, transitions, myDFA.alph());
     }

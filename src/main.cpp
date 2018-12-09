@@ -9,16 +9,17 @@
 
 int main(int argc, char *argv[])
 {
-  //  std::cout<< "start function" << std::endl;
     DFA firstone = EX::astarb();
+  //  std::cout<< "start function" << std::endl;
+
     Valmari::win(firstone);
     std::cout<<"cool stuff\n\n"<<std::endl;
 
     std::cout << "Hello World" << std::endl;
 
-    DFA wiki = EX::rand(20, 4);
-    Valmari::win(wiki);
-    std::cout<<"cool stuff"<<std::endl;
+    // DFA wiki = EX::rand(20, 4);
+    // Valmari::win(wiki);
+    // std::cout<<"cool stuff"<<std::endl;
 
     std::vector< std::vector<int> > H = Hopcroft::partition(firstone);
 
