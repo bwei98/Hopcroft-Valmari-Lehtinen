@@ -1,10 +1,11 @@
-#include <cstdlib>
 #include <vector>
-#include <iostream>
-#include <algorithm>
 #include "../include/dfa.h"
 #include "../include/valmari.h"
 
+/* This code is directly lifted from Valmari (2011)
+	"Fast brief practical DFA minimization".  The code has been changed
+	to use vectors instead of arrays in order to match the rest of the project.
+	Additional steps of converting to and from DFA class are also added */
 
 /* Refinable partition */
 std::vector<int> M;
@@ -44,13 +45,11 @@ struct partition{
 			M[s] = M[z++] = 0;
 		}
 	}
-
 };
 
 partition
 	B,     // blocks (consist of states)
 	C;     // cords (consist of transitions)
-
 int
 	nn,    // number of states
 	mm,    // number of transitions
@@ -99,26 +98,18 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
 }
 
   /* Main program */
-  DFA Valmari::win(DFA myDFA) {
+  DFA Valmari::minimise(DFA myDFA) {
+		/* Read sizes and reserve most memory */
     nn = myDFA.getStates().size();
     mm = myDFA.alph() * nn;
     q0 = myDFA.init();
-
-    std::vector<int> finals = myDFA.getFinals();
-
+    std::vector<int> finals = myDFA.get_finals();
     ff = finals.size();
-
-    /* Read sizes and reserve most memory */
-
-
-
-    for (int c = 0, count = 0; c < myDFA.alph(); ++c) {
+    for (int c = 0, count = 0; c < myDFA.alph(); ++c)
       for (int q = 0; q < nn; ++q, ++count) {
         T.push_back(q); L.push_back(c);
         H.push_back(myDFA.getTrans()[q * myDFA.alph() + c]);
       }
-    }
-
 		B.init( nn );
 		A = std::vector<int> (mm);
 		F = std::vector<int> (nn+1);
@@ -128,19 +119,13 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
       if( B.L[q] < B.P[0] ) {
         reach( q ); }
     }
-
-
     ff = rr; rem_unreachable( H, T );
-
 
     /* Make initial partition */
     	W = std::vector<int> ( mm+1 );
       M = std::vector<int> ( mm+1);
     	M[0] = ff;
-
     	if( ff ){ W[w++] = 0; B.split(); }
-
-
 
     	/* Make transition partition */
     	C.init( mm );
@@ -178,7 +163,8 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
       if( B.F[b] < ff ){ ++fo; } }
 
     /* Print the result */
-		/* Valmari prints the results, we don't we load into our DFA format instead
+		/* Valmari prints the results, we don't.
+		   We load into our DFA format instead
     std::cout << B.z <<' '<< mo<<' '<< B.S[q0] <<' '<< fo <<'\n';
     for( int t = 0; t < mm; ++t ) {
       if( B.L[T[t]] == B.F[B.S[T[t]]] ) {
@@ -187,7 +173,6 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
       for( int b = 0; b < B.z; ++b ) {
         if( B.F[b] < ff ){std::cout << b <<'\n'; }
       } */
-
 
 			int num_states = B.z;
 			int initial = B.S[q0];
@@ -203,5 +188,5 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
 			for(int i = 0; i < num_states; ++i) states[i] = i;
 
 
-      return DFA(num_states, states, fin, transitions, myDFA.alph());
+      return DFA(initial, states, fin, transitions, myDFA.alph());
     }

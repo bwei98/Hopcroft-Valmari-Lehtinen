@@ -1,28 +1,25 @@
 #include <cstdlib>
 #include <vector>
+#include <iostream>
 #include <algorithm>
 #include "../include/dfa.h"
 #include "../include/hopcroft.h"
 
 std::vector< std::vector<int> > Hopcroft::partition(DFA M){ //O(n^2 s log n)
   //P := {F, Q \ F}; O(n)
-  std::vector<int> F = M.getFinals();
-  std::vector<int> Q = M.getStates();
-  std::vector<int> Fc(Q.size());
-  for (int i = 0; i < Fc.size(); i++) Fc[i] = -1;
-  std::set_difference(Q.begin(), Q.end(), F.begin(),  F.end(), Fc.begin());
-  for (int i = Fc.size() - 1; i >= 0; --i)
-    if (Fc[i] == -1) Fc.pop_back(); else break;
+  std::vector<int> F = M.final_bits();
+  std::vector<int> Q (M.num_states(), 1);
+  std::vector<int> Fc (Q.size());
+  for(int i = 0; i < Q.size(); ++i) Fc[i] = !F[i];
   std::vector< std::vector<int> >  P;
   P.insert(P.begin(), F); P.insert(P.begin() + 1, Fc);
 
-  //  Ws := {F}; O(n)
+  //  Ws := {F}; O(1)
   std::vector< std::vector<int> > Ws;
   Ws.push_back(F);
 
   //while (Ws is not empty); O(log n) iterations
   while (Ws.size() > 0) {
-
     //choose and remove a set A from W; O(1)
     std::vector<int> A = Ws.front();
     Ws.erase(Ws.begin());
@@ -30,49 +27,38 @@ std::vector< std::vector<int> > Hopcroft::partition(DFA M){ //O(n^2 s log n)
     //for each c in Σ do; O(s) iterations
     for (int c = 0; c < M.alph(); ++c){
       //let X be the set of states for which a transition on c leads to a state in A
-      std::vector<int> X;
-      for (int q = 0; q < Q.size(); q++) {
-        for (int qa = 0; qa < A.size(); qa++) {
-          if (M.getTrans()[M.alph() * q + c] == A[qa])
-            X.push_back(q);
-        }
-      }
+      std::vector<int> X(Q.size());
+      for(int q = 0; q < Q.size(); ++q)
+      X[q] = A[M.getTrans()[M.alph() * q + c]];
 
       //for each set Y in P for which X ∩ Y is nonempty and Y \ X is nonempty do
-        // O(n) iterations
-      for (int y = P.size()-1; y >= 0; --y) {
+      // O(n) iterations
+      for (int y = P.size()-1; y >= 0 ; --y) {
         // O(n) to compute Y
-        std::vector<int> Y = P[y];
-        std::vector<int> XintY(std::min(X.size(),Y.size()));
-        std::vector<int> YsubX(Y.size());
-        for (int i = 0; i < XintY.size(); ++i) XintY[i] = -1;
-        for (int i = 0; i < YsubX.size(); ++i) YsubX[i] = -1;
-        std::set_intersection (X.begin(), X.end(), Y.begin(), Y.end(), XintY.begin());
-        std::set_difference (Y.begin(), Y.end(), X.begin(), X.end(), YsubX.begin());
-        for (int i = XintY.size() - 1; i >= 0; --i)
-          if (XintY[i] == -1) XintY.pop_back(); else break;
-        for (int i = YsubX.size() - 1; i >= 0; --i)
-          if (YsubX[i] == -1) YsubX.pop_back(); else break;
-        if (!XintY.empty() && !YsubX.empty()) {
+        std::vector<int> Y = P[y], XintY(Q.size()), YsubX(Q.size());
+        int sz_XintY = 0, sz_YsubX = 0;
+        for(int q = 0; q < Q.size(); ++q){
+          sz_XintY += XintY[q] = Y[q] && X[q];
+          sz_YsubX += YsubX[q] = Y[q] && !X[q];
+        }
+        if(sz_XintY && sz_YsubX) {
           //replace Y in P by the two sets X ∩ Y and Y \ X; O(1)
           P.erase(P.begin()+y);
           P.push_back(XintY); P.push_back(YsubX);
 
           //if Y is in W; O(n)
           int i = 0;
-          for ( ; i < Ws.size(); i++) if (Ws[i] == Y) break;
+          for ( ; i < Ws.size(); ++i) if (Ws[i] == Y) break;
           if (i != Ws.size()) {
             //replace Y in W by the same two sets; O(1)
             Ws.erase(Ws.begin() + i);
-            Ws.push_back(XintY);
-            Ws.push_back(YsubX);
+            Ws.push_back(XintY); Ws.push_back(YsubX);
           } else {
-            //if |X ∩ Y| <= |Y \ X|; O(1)
-            if (XintY.size() <= YsubX.size()) //add X ∩ Y to W; O(1)
-              Ws.push_back(XintY);
-            else //add Y \ X to W; O(1)
-              Ws.push_back(YsubX);
-
+            //if |X ∩ Y| > |Y \ X|; O(1)
+            if (sz_XintY > sz_YsubX) //add Y \ X to W; O(1)
+            Ws.push_back(YsubX);
+            else //add X ∩ Y to W;  O(1)
+            Ws.push_back(XintY);
           }
         }
       }
@@ -82,37 +68,35 @@ std::vector< std::vector<int> > Hopcroft::partition(DFA M){ //O(n^2 s log n)
 }
 
 DFA Hopcroft::part2DFA(std::vector< std::vector<int> > P, DFA original) {
-std::vector<int> finals = original.getFinals();
-
+  for(int i = 0; i < P.size(); ++i) {
+    std::vector<int> V;
+    for(int j = 0; j < P[i].size(); ++j)
+    if(P[i][j]) V.push_back(j);
+    P[i] = V;
+  }
+  std::vector<int> finals = original.final_bits();
   int initial;
-  std::vector<int> fin;
+  std::vector<int> fin (P.size(), 0);
   std::vector<int> Q;
   int transition_size = original.alph() * P.size();
   int* trans = (int*)std::calloc(transition_size, sizeof(int));
   for (int i = 0; i < P.size(); ++i) {
     Q.push_back(i);
-    for (int j = 0; j < finals.size(); ++j) {
-      if (P[i][0] == finals[j]) {
-        fin.push_back(i);
-        break;
-      }
-    }
-    for (int j = 0; j < P[i].size(); ++j) {
+    fin[i] = finals[P[i][0]];
+    for (int j = 0; j < P[i].size(); ++j)
       if (P[i][j] == original.init()) initial = i;
-      // else std::cout<<"Hopcroft failed"<<std::endl;
-    }
     for (int j = 0; j < original.alph(); ++j) {
       int dest = original.getTrans()[original.alph() * P[i][0] + j];
       bool done = false;
       for (int k = 0; k < P.size(); ++k) {
         if (done) break;
-        for (int l = 0; l < P[k].size(); ++l) {
+        for (int l = 0; l < P[k].size(); ++l)
           if (P[k][l] == dest) {
             trans[original.alph() * i + j] = k;
             done = true;
             break;
           }
-        }
+
       }
     }
   }

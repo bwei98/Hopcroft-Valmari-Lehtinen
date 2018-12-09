@@ -1,7 +1,5 @@
-#include <cstdlib>
 #include <vector>
 #include <ctime>
-#include <algorithm>
 #include "../include/dfa.h"
 #include "../include/examples.h"
 

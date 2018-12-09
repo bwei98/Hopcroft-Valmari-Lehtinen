@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <vector>
 
 class DFA{
@@ -14,9 +13,11 @@ class DFA{
       DFA (int, std::vector<int>, std::vector<int>, int*, int);
       std::vector<int> getStates (void);
       int* getTrans (void);
-      std::vector<int> getFinals (void);
+      std::vector<int> get_finals (void);
+      std::vector<int> final_bits (void);
       int alph (void);
       int init (void);
       int num_states (void);
       int num_finals (void);
+      void print (std::string);
 };
