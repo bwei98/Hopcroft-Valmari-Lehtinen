@@ -1,10 +1,10 @@
 #include <cstdlib>
 #include <vector>
+#include <iostream>
 #include <algorithm>
 #include "../include/dfa.h"
 #include "../include/valmari.h"
 
-#include <iostream>
 
 /* Refinable partition */
 std::vector<int> M;
@@ -99,11 +99,17 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
 }
 
   /* Main program */
-  DFA Valmari::win(DFA myDFA) {
+  void Valmari::win(DFA myDFA) {
     int nn = myDFA.getStates().size();
     int mm = myDFA.alph() * nn;
     int q0 = myDFA.init();
-    int ff = myDFA.getFinals().size();
+
+    std::vector<int> finals = myDFA.getFinals();
+
+    int ff = finals.size();
+
+    std::cout<<nn<<" "<<mm<<" "<<q0<<" "<<ff<<std::endl;
+
     /* Read sizes and reserve most memory */
     T = std::vector<int>(mm);
     L = std::vector<int>(mm);
@@ -112,20 +118,23 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
     A = std::vector<int> (mm);
     F = std::vector<int> (nn+1);
 
-    for (int c = 0; c < myDFA.alph(); ++c) {
-      for (int q = 0; q < nn; ++q) {
-        T.push_back(q); L.push_back(c);
-        H.push_back(myDFA.getTrans()[q * myDFA.alph() + c]);
+    for (int c = 0, count = 0; c < myDFA.alph(); ++c) {
+      for (int q = 0; q < nn; ++q, ++count) {
+        T[count] = q; L[count] = c;
+        H[count] = myDFA.getTrans()[q * myDFA.alph() + c];
       }
     }
 
-    // for(int i = 0; i< mm; ++i)
-    // std::cout<<T[i]<<' '<<L[i]<<' '<<H[i]<<std::endl;
     reach( q0 ); rem_unreachable( T, H );
-    for (int q : myDFA.getFinals()) {
-      if( B.L[q] < B.P[0] ) { reach( q ); }
+    // for(int i = 0; i < H.size(); i++)
+    //   std::cout<<T[i]<<" "<<L[i]<<" "<<H[i]<<std::endl;
+
+    for (int q : finals) {
+      if( B.L[q] < B.P[0] ) {
+        reach( q ); }
     }
     ff = rr; rem_unreachable( H, T );
+
 
     /* Make initial partition */
     	W = std::vector<int> ( mm+1 );
@@ -190,5 +199,5 @@ void rem_unreachable( std::vector<int> &T, std::vector<int> &H ){
         if( B.F[b] < ff ){std::cout << b <<'\n'; }
       }
 
-      return myDFA;
+      //return myDFA;
     }

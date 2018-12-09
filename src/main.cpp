@@ -9,13 +9,14 @@
 
 int main(int argc, char *argv[])
 {
+  //  std::cout<< "start function" << std::endl;
     DFA firstone = EX::astarb();
     Valmari::win(firstone);
     std::cout<<"cool stuff\n\n"<<std::endl;
 
     std::cout << "Hello World" << std::endl;
 
-    DFA wiki = EX::wikipedia();
+    DFA wiki = EX::rand(20, 4);
     Valmari::win(wiki);
     std::cout<<"cool stuff"<<std::endl;
 

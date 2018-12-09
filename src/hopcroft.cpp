@@ -82,6 +82,8 @@ std::vector< std::vector<int> > Hopcroft::partition(DFA M){ //O(n^2 s log n)
 }
 
 DFA Hopcroft::part2DFA(std::vector< std::vector<int> > P, DFA original) {
+std::vector<int> finals = original.getFinals();
+
   int initial;
   std::vector<int> fin;
   std::vector<int> Q;
@@ -89,8 +91,8 @@ DFA Hopcroft::part2DFA(std::vector< std::vector<int> > P, DFA original) {
   int* trans = (int*)std::calloc(transition_size, sizeof(int));
   for (int i = 0; i < P.size(); ++i) {
     Q.push_back(i);
-    for (int j = 0; j < original.getFinals().size(); ++j) {
-      if (P[i][0] == original.getFinals()[j]) {
+    for (int j = 0; j < finals.size(); ++j) {
+      if (P[i][0] == finals[j]) {
         fin.push_back(i);
         break;
       }

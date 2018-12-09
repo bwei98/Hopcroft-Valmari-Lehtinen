@@ -14,7 +14,12 @@ DFA::DFA (int initial, std::vector<int> Q, std::vector<int> F, int* trans, int s
 
 std::vector<int> DFA::getStates() { return states; }
 
-std::vector<int> DFA::getFinals() { return finals; }
+std::vector<int> DFA::getFinals() {
+  std::vector<int> fin;
+  for(int i = 0; i < num_states(); ++i)
+    if(finals[i]) fin.push_back(i);
+  return fin;
+}
 
 int DFA::init() { return q0; }
 
